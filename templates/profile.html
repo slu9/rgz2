@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="profile-header">
+        <h1 class="auth-title">Личный кабинет</h1>
+        
+        <div class="user-info-card">
+            <div class="user-main-info">
+                <h3>{{ user_name }}</h3>
+                <p class="user-login">Логин: {{ user_login }}</p>
+            </div>
+            
+            <div class="balance-section">
+                <div class="balance-amount">
+                    💰 Баланс: <strong>{{ user_balance }} руб</strong>
+                </div>
+                <form method="POST" action="{{ url_for('topup_balance') }}" class="topup-form">
+                    <input type="hidden" name="theme" value="{{ session.get('theme', 'day') }}">
+                    <button type="submit" class="auth-button topup-btn">
+                        Пополнить на 1000 руб
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-cells-section">
+        <h3>Мои арендованные ячейки</h3>
+        
+        {% if user_cells %}
+            <div class="cells-grid">
+                {% for cell in user_cells %}
+                <div class="cell-card">
+                    <div class="cell-number">Ячейка #{{ cell.id }}</div>
+                    <div class="cell-type">{{ cell.building_name }}</div>
+                    <form method="POST" action="{{ url_for('toggle_cell', cell_id=cell.id) }}">
+                        <input type="hidden" name="theme" value="{{ session.get('theme', 'day') }}">
+                        <input type="hidden" name="from_profile" value="1">
+                        <button type="submit" class="free-cell-btn">
+                            Освободить
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-cells">
+                <p>У вас нет арендованных ячеек</p>
+                <a href="{{ url_for('index') }}" class="auth-button">Арендовать ячейку</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="profile-stats">
+        <h3>Статистика</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-label">Арендовано ячеек:</span>
+                <span class="stat-value">{{ user_cells|length }}/5</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Общая стоимость:</span>
+                <span class="stat-value">{{ user_balance }} руб</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

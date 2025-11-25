@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru" class="{% if session.get('theme', 'day') == 'night' %}city-night{% else %}city-day{% endif %}">
+<head>
+    <meta charset="utf-8">
+    <title>City Storage – камера хранения</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='img/day.png') }}">
+    <link rel="preload" as="image" href="{{ url_for('static', filename='img/night.png') }}">
+    
+    <!-- Предзагрузка тем для мгновенного переключения -->
+    <style>
+        .city-day, .city-night {
+            transition: none !important;
+        }
+    </style>
+</head>
+
+<body data-username="{{ current_user or '' }}">
+<header class="main-header">
+    <div class="logo">
+        <span class="logo-city">City</span><span class="logo-storage">Storage</span>
+    </div>
+
+    <nav class="main-nav">
+        <a href="{{ url_for('index') }}">Город</a>
+        
+        {% if current_user %}
+            <a href="{{ url_for('profile') }}">Личный кабинет</a>
+            <span class="user-name">Привет, {{ current_user }}!</span>
+            <a href="{{ url_for('logout') }}">Выход</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Вход</a>
+            <a href="{{ url_for('register') }}">Регистрация</a>
+        {% endif %}
+        
+        <a href="{{ url_for('pricing') }}">Тарифы</a>
+        <button id="toggleTheme" class="theme-btn">
+            {% if session.get('theme', 'day') == 'night' %}
+                ☀️ День
+            {% else %}
+                🌙 Ночь
+            {% endif %}
+        </button>
+    </nav>
+
+    <div class="student-info">
+        {{ student_name }} — {{ student_group }}
+    </div>
+</header>
+
+<main class="page-content">
+    {# флеш-сообщения #}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for msg in messages %}
+                    <div class="flash-message">{{ msg }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <!-- тултип для "Мой дом / Дом пользователя / Свободный участок" -->
+    <div id="cell-tooltip" class="cell-tooltip hidden"></div>
+</main>
+
+<!-- Красивое модальное окно подтверждения удаления дома -->
+<div id="deleteModal" class="confirm-modal hidden">
+    <div class="confirm-backdrop"></div>
+    <div class="confirm-window">
+        <h3 class="confirm-title">Убрать дом с участка?</h3>
+        <p class="confirm-text">Вы уверены, что хотите убрать свой дом с этого участка? Это действие нельзя отменить.</p>
+        <div class="confirm-actions">
+            <button id="modal-cancel" class="confirm-btn confirm-cancel">Отмена</button>
+            <button id="modal-confirm" class="confirm-btn confirm-ok">Убрать дом</button>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/city.js') }}"></script>
+</body>
+</html>

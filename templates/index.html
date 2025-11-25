@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="city-wrapper">
+    <h1 class="city-title">Камера хранения "Мини-город"</h1>
+
+    <div class="stats-panel">
+        <div class="stat-item">
+            <span class="stat-label">Занятых ячеек:</span>
+            <span class="stat-value" id="stat-occupied">0</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Свободных участков:</span>
+            <span class="stat-value" id="stat-free">{{ cells|length }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Уровень развития города:</span>
+            <span class="stat-value" id="stat-level">0%</span>
+        </div>
+        {% if current_user %}
+        <div class="stat-item">
+            <span class="stat-label">Ваш баланс:</span>
+            <span class="stat-value">💰 {{ user_balance }} руб</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="city-grid"
+         style="--rows: {{ rows }}; --cols: {{ cols }};">
+
+        {% for cell in cells %}
+            <form class="cell-form"
+                  method="post"
+                  action="{{ url_for('toggle_cell', cell_id=cell.id) }}">
+
+                <button type="button"
+                        class="cell
+                               {% if cell.occupied %}occupied type{{ cell.building_type }}{% else %}free{% endif %}
+                               {% if cell.owner_name == current_user and cell.occupied %}own-building{% elif cell.occupied %}foreign-building{% endif %}"
+                        data-cell-id="{{ cell.id }}"
+                        data-occupied="{{ 1 if cell.occupied else 0 }}"
+                        data-owner="{{ cell.owner_name or '' }}">
+                </button>
+            </form>
+        {% endfor %}
+    </div>
+
+    <div id="building-select" class="building-select hidden">
+        <div class="building-option" data-type="1">
+            <img src="/static/img/building_shop.png">
+            <div class="building-price">100 руб</div>
+        </div>
+        <div class="building-option" data-type="2">
+            <img src="/static/img/building_hospital.png">
+            <div class="building-price">150 руб</div>
+        </div>
+        <div class="building-option" data-type="3">
+            <img src="/static/img/building_museum.png">
+            <div class="building-price">200 руб</div>
+        </div>
+        <div class="building-option" data-type="4">
+            <img src="/static/img/building_post.png">
+            <div class="building-price">120 руб</div>
+        </div>
+        <div class="building-option" data-type="5">
+            <img src="/static/img/building_hotel.png">
+            <div class="building-price">180 руб</div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <h1 class="auth-title">Регистрация в City Storage</h1>
+
+    <form class="auth-form" method="post" action="#">
+        <label class="auth-field">
+            <span>Имя</span>
+            <input type="text" name="name" required>
+        </label>
+
+        <label class="auth-field">
+            <span>Логин</span>
+            <input type="text" name="login" required>
+        </label>
+
+        <label class="auth-field">
+            <span>Пароль</span>
+            <input type="password" name="password" required>
+        </label>
+
+        <label class="auth-field">
+            <span>Повтор пароля</span>
+            <input type="password" name="password_confirm" required>
+        </label>
+
+        <button type="submit" class="auth-button">Зарегистрироваться</button>
+
+        <p class="auth-note">
+            Уже есть аккаунт?
+            <a href="{{ url_for('login') }}">Войти</a>
+        </p>
+    </form>
+</div>
+{% endblock %}
