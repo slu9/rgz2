@@ -257,11 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
             form.submit();
         });
     });
-
-    // ---------- ПОДСКАЗКА "МОЙ ДОМ" / "ДОМ ПОЛЬЗОВАТЕЛЯ" ----------
+// ---------- ПОДСКАЗКА "МОЙ ДОМ" / "ДОМ ПОЛЬЗОВАТЕЛЯ" ----------
     if (tooltip && wrapper) {
         getCells().forEach(cell => {
-            cell.addEventListener("mouseenter", () => {
+            cell.addEventListener("mouseenter", (e) => {
                 const owner = (cell.dataset.owner || "").trim();
 
                 if (owner && currentUser && owner === currentUser) {
@@ -277,12 +276,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const cellRect = cell.getBoundingClientRect();
                 const wrapperRect = wrapper.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
 
-                tooltip.style.left =
-                    (cellRect.left - wrapperRect.left + cellRect.width / 2) + "px";
+                // Позиционируем тултип точно над ячейкой
+                let left = cellRect.left - wrapperRect.left + cellRect.width / 2;
+                let top = cellRect.top - wrapperRect.top - tooltipRect.height - 8;
 
-                tooltip.style.top =
-                    (cellRect.top - wrapperRect.top - 10) + "px";
+                // Корректируем позицию, чтобы тултип не выходил за границы wrapper
+                left = Math.max(tooltipRect.width / 2, 
+                            Math.min(left, wrapperRect.width - tooltipRect.width / 2));
+                top = Math.max(10, top);
+
+                tooltip.style.left = left + "px";
+                tooltip.style.top = top + "px";
+                tooltip.style.transform = "translateX(-50%)";
             });
 
             cell.addEventListener("mouseleave", () => {
@@ -291,7 +298,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-
     // ---------- АВТО-СКРЫТИЕ ФЛЕШ-СООБЩЕНИЙ ----------
     const flashes = document.querySelectorAll(".flash-message");
     if (flashes.length) {

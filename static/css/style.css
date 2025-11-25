@@ -20,6 +20,7 @@ body {
     display: flex;
     flex-direction: column;
     color: #111827;
+    overflow-x: hidden;
 }
 
 /* ФОН ГОРОДА (день/ночь) */
@@ -31,13 +32,7 @@ html.city-night {
     background: url("/static/img/night.png") center top / cover no-repeat fixed;
 }
 
-/* отключаем глобальные transition для всех элементов,
-   но включаем плавные переходы для контейнеров/темы */
-.city-day, .city-night,
-.city-day *, .city-night * {
-    transition: none !important;
-}
-
+/* Плавные переходы для всех элементов */
 body,
 .main-header,
 .city-wrapper,
@@ -55,12 +50,20 @@ body,
 .contact-info,
 .user-balance,
 .city-title,
-.auth-title {
+.auth-title,
+.profile-header-title,
+.profile-section-title,
+.stat-item,
+.stat-label,
+.stat-value,
+.building-select,
+.confirm-window {
     transition:
         background-color 0.35s ease,
         color 0.35s ease,
         box-shadow 0.35s ease,
-        border-color 0.35s ease;
+        border-color 0.35s ease,
+        opacity 0.35s ease;
 }
 
 /* но для hover оставляем короткие анимации */
@@ -192,7 +195,7 @@ html.city-night .theme-btn:hover {
     max-width: 900px;
     width: 100%;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.75); /* полупрозрачная карточка, чтобы фон читался */
+    background: rgba(255, 255, 255, 0.65);
     border-radius: 22px;
     padding: 24px;
     backdrop-filter: blur(14px);
@@ -209,6 +212,7 @@ html.city-night .theme-btn:hover {
     font-size: 26px;
     margin-bottom: 16px;
     letter-spacing: 0.02em;
+    color: #0f172a;
 }
 
 /* ============= ПАНЕЛЬ СТАТИСТИКИ ============= */
@@ -220,26 +224,79 @@ html.city-night .theme-btn:hover {
     padding: 12px 18px;
     margin-bottom: 24px;
     border-radius: 16px;
-    background: rgba(248, 250, 252, 0.95);
+    background: rgba(248, 250, 252, 0.75);
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(10px);
 }
 
 .stat-item {
     display: flex;
     flex-direction: column;
     min-width: 150px;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 12px 16px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .stat-label {
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #6b7280;
+    color: #4b5563;
+    font-weight: 600;
 }
 
 .stat-value {
     font-size: 18px;
     font-weight: 700;
+    color: #111827;
+}
+
+/* ============= СПИСОК ЖИТЕЛЕЙ ============= */
+
+.residents-section {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.residents-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px;
+    text-align: center;
+}
+
+.residents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.resident-card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.resident-name {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.resident-stats {
+    font-size: 12px;
+    color: #6b7280;
 }
 
 /* ============= СЕТКА ГОРОДА ============= */
@@ -515,31 +572,36 @@ html.city-night .theme-btn:hover {
 }
 
 .profile-header-title {
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 800;
     color: #0f172a;
-    margin: 0 0 6px;
-    letter-spacing: 0.03em;
+    margin: 0 0 8px;
+    text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, #0f172a, #374151);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .profile-header-subtitle {
     margin: 0;
-    font-size: 14px;
+    font-size: 16px;
     color: #6b7280;
 }
 
 /* основной блок личного кабинета */
 .user-info-card {
-    background: radial-gradient(circle at 0% 0%, #fef9c3 0, #f9fafb 45%, #e0f2fe 100%);
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 24px;
     padding: 20px 22px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     display: grid;
     grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.4fr);
     gap: 18px;
     align-items: center;
     box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
     border: 1px solid rgba(248, 250, 252, 0.9);
+    backdrop-filter: blur(16px);
 }
 
 /* левая часть – данные пользователя */
@@ -575,14 +637,10 @@ html.city-night .theme-btn:hover {
     color: #111827;
 }
 
-.user-main-text .user-group {
-    font-size: 13px;
-    color: #4b5563;
-}
-
+/* Убираем вывод логина */
+.user-main-text .user-group,
 .user-main-text .user-note {
-    font-size: 12px;
-    color: #6b7280;
+    display: none !important;
 }
 
 /* маленькие статистические бейджи под аватаркой */
@@ -594,11 +652,14 @@ html.city-night .theme-btn:hover {
 }
 
 .user-stat-badge {
-    font-size: 11px;
-    padding: 4px 8px;
+    font-size: 13px;
+    padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(15, 23, 42, 0.04);
+    background: rgba(15, 23, 42, 0.15);
     color: #374151;
+    font-weight: 700;
+    border: 1px solid rgba(15, 23, 42, 0.2);
+    backdrop-filter: blur(5px);
 }
 
 /* правая часть – баланс */
@@ -610,7 +671,8 @@ html.city-night .theme-btn:hover {
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #6b7280;
+    color: #374151;
+    font-weight: 600;
     margin-bottom: 4px;
 }
 
@@ -618,7 +680,7 @@ html.city-night .theme-btn:hover {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 6px;
-    color: #064e3b;
+    color: #065f46;
 }
 
 .balance-subtext {
@@ -648,15 +710,17 @@ html.city-night .theme-btn:hover {
 
 /* список ячеек пользователя */
 .profile-section-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 18px 0 6px;
-    color: #0f172a;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 24px 0 8px;
+    color: #111827;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.2);
 }
 
 .profile-section-subtitle {
-    margin: 0 0 10px;
-    font-size: 13px;
+    margin: 0 0 16px;
+    font-size: 14px;
     color: #6b7280;
 }
 
@@ -664,12 +728,12 @@ html.city-night .theme-btn:hover {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
-    margin: 10px 0 20px;
+    margin: 16px 0 32px;
 }
 
 .cell-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255, 255, 255, 0.85);
     border-radius: 16px;
     padding: 14px 14px 12px;
     text-align: left;
@@ -677,14 +741,6 @@ html.city-night .theme-btn:hover {
     border: 1px solid rgba(226, 232, 240, 0.9);
     box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
     overflow: hidden;
-}
-
-.cell-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 0 0, rgba(251, 191, 36, 0.16), transparent 55%);
-    pointer-events: none;
 }
 
 .cell-number {
@@ -696,13 +752,14 @@ html.city-night .theme-btn:hover {
 
 .cell-type {
     margin: 4px 0 10px;
-    color: #6b7280;
+    color: #4b5563;
     font-size: 13px;
+    font-weight: 500;
 }
 
 .cell-meta {
     font-size: 12px;
-    color: #9ca3af;
+    color: #6b7280;
     margin-bottom: 8px;
 }
 
@@ -751,13 +808,12 @@ html.city-night .theme-btn:hover {
 .rules-section,
 .terms-section,
 .support-section {
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: blur(18px);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(15px);
     border-radius: 24px;
     padding: 24px 26px 26px;
     margin-bottom: 26px;
-    border: 1px solid rgba(226, 232, 240, 0.9);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 /* большой заголовок "Тарифы и правила" */
@@ -765,14 +821,16 @@ html.city-night .theme-btn:hover {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 18px;
-    margin: 0 0 14px;
-    font-size: 26px;
+    padding: 12px 20px;
+    margin: 0 0 16px;
+    font-size: 28px;
     font-weight: 700;
     color: #0f172a;
     border-radius: 999px;
-    background: linear-gradient(135deg, #fef3c7, #dbeafe);
-    box-shadow: 0 10px 24px rgba(148, 163, 184, 0.5);
+    background: linear-gradient(135deg, rgba(254, 243, 199, 0.9), rgba(219, 234, 254, 0.9));
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 .pricing-section > h2::before {
@@ -786,7 +844,7 @@ html.city-night .theme-btn:hover {
     color: #6b7280;
 }
 
-/* грид тарифов – красиво центрируется даже при 5 карточках */
+/* грид тарифов */
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -796,14 +854,14 @@ html.city-night .theme-btn:hover {
 
 .price-card {
     position: relative;
-    background: radial-gradient(circle at 0% 0%, rgba(251, 191, 36, 0.18), #f9fafb 55%, #e5e7eb 100%);
-    border-radius: 18px;
-    padding: 18px 18px 20px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    padding: 20px;
     text-align: left;
     overflow: hidden;
-    border: 1px solid rgba(209, 213, 219, 0.9);
-    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .price-card:hover {
@@ -812,64 +870,146 @@ html.city-night .theme-btn:hover {
     border-color: rgba(59, 130, 246, 0.7);
 }
 
-/* плашка с иконкой тарифа */
-.price-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.85);
-    font-size: 12px;
-    color: #4b5563;
-    margin-bottom: 6px;
+/* Добавляем изображения домов в карточки тарифов */
+.price-card[data-building-type="1"]::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/img/building_shop.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
 }
 
-.price-pill-icon {
-    font-size: 18px;
+.price-card[data-building-type="2"]::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/img/building_hospital.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.price-card[data-building-type="3"]::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/img/building_museum.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.price-card[data-building-type="4"]::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/img/building_post.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.price-card[data-building-type="5"]::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 60px;
+    height: 60px;
+    background-image: url("/static/img/building_hotel.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.price-card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* Убираем дублирование названий в тарифах */
+.price-pill {
+    display: none;
 }
 
 .price-card-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 4px 0 2px;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 12px;
     color: #111827;
 }
 
 .price {
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     color: #059669;
-    margin: 8px 0 4px;
+    margin: 12px 0 4px;
+    text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
 }
 
 .price-period {
-    font-size: 12px;
+    font-size: 14px;
     color: #6b7280;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
 }
 
 .price-card p {
-    margin: 0 0 10px;
-    font-size: 13px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 16px;
     color: #4b5563;
 }
 
-.price-card ul {
+/* Список преимуществ в карточках */
+.price-features {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+.price-features li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     font-size: 13px;
     color: #4b5563;
+    position: relative;
+    padding-left: 20px;
 }
 
-.price-card ul li::before {
-    content: "• ";
+.price-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
     color: #10b981;
+    font-weight: bold;
 }
 
-.price-card ul li {
-    margin-bottom: 4px;
+.price-features li:last-child {
+    border-bottom: none;
 }
 
 /* блок правил */
@@ -890,11 +1030,12 @@ html.city-night .theme-btn:hover {
 }
 
 .rule-category {
-    background: rgba(248, 250, 252, 0.98);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
     padding: 16px 18px;
     border-radius: 16px;
     border-left: 4px solid #10b981;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .rule-category:nth-child(2) {
@@ -920,10 +1061,11 @@ html.city-night .theme-btn:hover {
 
 /* список терминов / условий */
 .terms-list {
-    background: rgba(248, 250, 252, 0.98);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
     padding: 16px 18px;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .term-item {
@@ -939,10 +1081,11 @@ html.city-night .theme-btn:hover {
 
 /* контакты поддержки */
 .contact-info {
-    background: rgba(248, 250, 252, 0.98);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
     border-radius: 16px;
     padding: 16px 18px;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     font-size: 14px;
     color: #4b5563;
 }
@@ -978,13 +1121,40 @@ html.city-night .stats-panel {
     background: rgba(15, 23, 42, 0.9);
 }
 
-/* Текст статистики ночью */
+html.city-night .stat-item {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 html.city-night .stat-label {
     color: #cbd5e1;
 }
 
 html.city-night .stat-value {
-    color: #f1f5f9;
+    color: #f9fafb;
+}
+
+/* Список жителей ночью */
+html.city-night .residents-section {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .residents-title {
+    color: #f9fafb;
+}
+
+html.city-night .resident-card {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .resident-name {
+    color: #f9fafb;
+}
+
+html.city-night .resident-stats {
+    color: #cbd5e1;
 }
 
 /* Формы авторизации ночью */
@@ -1034,18 +1204,14 @@ html.city-night .user-main-text .user-name {
     color: #f9fafb;
 }
 
-html.city-night .user-main-text .user-group,
-html.city-night .user-main-text .user-note,
 html.city-night .user-stat-badge {
-    color: #cbd5e1;
-}
-
-html.city-night .user-stat-badge {
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 html.city-night .balance-label {
-    color: #cbd5e1;
+    color: #e5e7eb;
 }
 
 html.city-night .balance-amount {
@@ -1053,18 +1219,25 @@ html.city-night .balance-amount {
 }
 
 html.city-night .balance-subtext {
-    color: #9ca3af;
+    color: #cbd5e1;
 }
 
 html.city-night .cell-card {
-    background: rgba(15, 23, 42, 0.96);
+    background: rgba(15, 23, 42, 0.9);
     border-color: rgba(51, 65, 85, 0.9);
     color: #e5e7eb;
 }
 
-html.city-night .cell-type,
+html.city-night .cell-number {
+    color: #f9fafb;
+}
+
+html.city-night .cell-type {
+    color: #d1d5db;
+}
+
 html.city-night .cell-meta {
-    color: #cbd5e1;
+    color: #9ca3af;
 }
 
 html.city-night .free-cell-btn {
@@ -1104,11 +1277,6 @@ html.city-night .pricing-section > p {
 html.city-night .price-card {
     background: radial-gradient(circle at 0% 0%, rgba(251, 191, 36, 0.25), #020617 55%, #020617 100%);
     border-color: rgba(51, 65, 85, 0.9);
-    color: #e5e7eb;
-}
-
-html.city-night .price-pill {
-    background: rgba(15, 23, 42, 0.9);
     color: #e5e7eb;
 }
 
@@ -1332,6 +1500,10 @@ html.city-night .confirm-text {
     .balance-section {
         text-align: left;
     }
+
+    .residents-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ============= АНИМАЦИЯ ПОСТРОЙКИ ============= */
@@ -1369,458 +1541,309 @@ html.city-night .confirm-text {
         rise-building 0.6s ease-out forwards,
         glow-build 1.5s ease-in-out;
 }
-/* ============= ИСПРАВЛЕНИЯ ДЛЯ ДНЕВНОЙ ТЕМЫ ============= */
 
-/* Убираем белый фон при скролле за пределы сайта */
-html, body {
-    overflow-x: hidden;
+/* ============= ОБНОВЛЕННАЯ СТРУКТУРА ГЛАВНОЙ СТРАНИЦЫ ============= */
+
+.main-page-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-body {
-    min-height: 100vh;
+/* Левая колонка - сетка города */
+.city-main-section {
+    grid-column: 1;
+}
+
+/* Правая колонка - список жителей */
+.residents-sidebar {
+    grid-column: 2;
+}
+
+.residents-section {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 140px);
     overflow-y: auto;
 }
 
-/* Улучшаем читаемость в личном кабинете */
-.user-info-card {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(16px);
-}
-
-.cell-card {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(12px);
-}
-
-/* Улучшаем сетку города - делаем более прозрачной */
-.city-wrapper {
-    background: rgba(255, 255, 255, 0.65) !important;
-    backdrop-filter: blur(12px);
-}
-
-/* Статистика - делаем плашки полупрозрачными */
-.stats-panel {
-    background: rgba(248, 250, 252, 0.75) !important;
-    backdrop-filter: blur(10px);
-}
-
-/* ============= ПЕРЕОФОРМЛЕНИЕ СТРАНИЦЫ ТАРИФОВ ============= */
-
-/* Заголовок "Тарифы и правила" */
-.pricing-section > h2 {
-    background: linear-gradient(135deg, rgba(254, 243, 199, 0.9), rgba(219, 234, 254, 0.9)) !important;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #0f172a !important;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-}
-
-/* Плашки тарифов - полупрозрачные с улучшенным дизайном */
-.pricing-section,
-.rules-section,
-.terms-section,
-.support-section {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-/* Карточки тарифов с изображениями домов */
-.price-card {
-    background: rgba(255, 255, 255, 0.75) !important;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    border-radius: 20px;
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-/* Добавляем изображения домов в карточки тарифов */
-.price-card[data-building-type="1"]::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 60px;
-    background-image: url("/static/img/building_shop.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    z-index: 0;
-}
-
-.price-card[data-building-type="2"]::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 60px;
-    background-image: url("/static/img/building_hospital.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    z-index: 0;
-}
-
-.price-card[data-building-type="3"]::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 60px;
-    background-image: url("/static/img/building_museum.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    z-index: 0;
-}
-
-.price-card[data-building-type="4"]::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 60px;
-    background-image: url("/static/img/building_post.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    z-index: 0;
-}
-
-.price-card[data-building-type="5"]::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 60px;
-    height: 60px;
-    background-image: url("/static/img/building_hotel.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.15;
-    z-index: 0;
-}
-
-/* Улучшаем контент карточек */
-.price-card-content {
-    position: relative;
-    z-index: 1;
-}
-
-.price-pill {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.price-card-title {
+.residents-title {
     font-size: 20px;
     font-weight: 700;
-    margin: 12px 0 8px;
-    color: #111827;
-}
-
-.price {
-    font-size: 28px;
-    font-weight: 800;
-    color: #059669;
-    margin: 12px 0 4px;
-    text-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
-}
-
-.price-period {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 16px;
-}
-
-.price-card p {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 16px;
-    color: #4b5563;
-}
-
-/* Список преимуществ в карточках */
-.price-features {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.price-features li {
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    font-size: 13px;
-    color: #4b5563;
-    position: relative;
-    padding-left: 20px;
-}
-
-.price-features li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #10b981;
-    font-weight: bold;
-}
-
-.price-features li:last-child {
-    border-bottom: none;
-}
-
-/* Улучшаем блоки правил и условий */
-.rule-category,
-.terms-list,
-.contact-info {
-    background: rgba(255, 255, 255, 0.7) !important;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-/* Улучшаем адаптивность */
-@media (max-width: 768px) {
-    .pricing-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .price-card {
-        padding: 16px;
-    }
-    
-    .price-card[data-building-type]::before {
-        width: 50px;
-        height: 50px;
-        top: 8px;
-        right: 8px;
-    }
-}
-
-/* Сохраняем ночную тему без изменений */
-html.city-night .user-info-card,
-html.city-night .cell-card,
-html.city-night .city-wrapper,
-html.city-night .stats-panel,
-html.city-night .pricing-section,
-html.city-night .rules-section,
-html.city-night .terms-section,
-html.city-night .support-section,
-html.city-night .price-card,
-html.city-night .rule-category,
-html.city-night .terms-list,
-html.city-night .contact-info {
-    /* Ночная тема остается как есть */
-    background: inherit !important;
-}
-
-/* ============= ИСПРАВЛЕНИЯ ДЛЯ ЛИЧНОГО КАБИНЕТА ============= */
-
-/* Убираем вывод логина */
-.user-main-text .user-group,
-.user-main-text .user-note {
-    display: none !important;
-}
-
-/* Улучшаем читаемость статистики в личном кабинете */
-.user-stat-badge {
-    background: rgba(15, 23, 42, 0.1) !important;
-    color: #374151 !important;
-    font-weight: 600;
-    border: 1px solid rgba(15, 23, 42, 0.1);
-    backdrop-filter: blur(5px);
-}
-
-/* Улучшаем читаемость текста в карточках ячеек */
-.cell-card {
-    background: rgba(255, 255, 255, 0.85) !important;
-    backdrop-filter: blur(12px);
-}
-
-.cell-number {
-    color: #111827 !important;
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.cell-type {
-    color: #4b5563 !important;
-    font-weight: 500;
-}
-
-.cell-meta {
-    color: #6b7280 !important;
-}
-
-/* Улучшаем баланс в дневной теме */
-.balance-section {
-    text-align: right;
-}
-
-.balance-label {
-    color: #374151 !important;
-    font-weight: 600;
-}
-
-.balance-amount {
-    color: #065f46 !important;
-    font-weight: 700;
-}
-
-.balance-subtext {
-    color: #4b5563 !important;
-}
-
-/* ============= ИСПРАВЛЕНИЯ ДЛЯ НОЧНОЙ ТЕМЫ ============= */
-
-/* Улучшаем читаемость в ночной теме */
-html.city-night .user-stat-badge {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: #e5e7eb !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-html.city-night .cell-card {
-    background: rgba(15, 23, 42, 0.9) !important;
-}
-
-html.city-night .cell-number {
-    color: #f9fafb !important;
-}
-
-html.city-night .cell-type {
-    color: #d1d5db !important;
-}
-
-html.city-night .cell-meta {
-    color: #9ca3af !important;
-}
-
-html.city-night .balance-label {
-    color: #e5e7eb !important;
-}
-
-html.city-night .balance-amount {
-    color: #bbf7d0 !important;
-}
-
-html.city-night .balance-subtext {
-    color: #cbd5e1 !important;
-}
-
-/* ============= ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ ============= */
-
-/* Улучшаем контрастность для всей статистики */
-.stat-item {
-    background: rgba(255, 255, 255, 0.6);
-    padding: 12px 16px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.stat-label {
-    color: #4b5563 !important;
-    font-weight: 600;
-}
-
-.stat-value {
-    color: #111827 !important;
-}
-
-/* Ночная тема для статистики */
-html.city-night .stat-item {
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-html.city-night .stat-label {
-    color: #cbd5e1 !important;
-}
-
-html.city-night .stat-value {
-    color: #f9fafb !important;
-}
-
-/* Улучшаем кнопку пополнения баланса */
-.topup-btn {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
-    color: white;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
-}
-
-.topup-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.6);
-}
-
-/* Улучшаем разделители в личном кабинете */
-.profile-section-title {
-    color: #111827 !important;
-    font-weight: 700;
-    margin: 24px 0 8px;
-    padding-bottom: 8px;
+    color: #0f172a;
+    margin: 0 0 16px;
+    text-align: center;
+    padding-bottom: 12px;
     border-bottom: 2px solid rgba(59, 130, 246, 0.2);
 }
 
-.profile-section-subtitle {
-    color: #6b7280 !important;
-    margin-bottom: 16px;
+.residents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-/* Ночная тема для заголовков разделов */
-html.city-night .profile-section-title {
-    color: #f9fafb !important;
+.resident-card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-align: left;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.resident-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.resident-name {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.resident-stats {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Ночная тема для сайдбара */
+html.city-night .residents-section {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .residents-title {
+    color: #f9fafb;
     border-bottom-color: rgba(59, 130, 246, 0.4);
 }
 
-html.city-night .profile-section-subtitle {
-    color: #cbd5e1 !important;
+html.city-night .resident-card {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(51, 65, 85, 0.9);
 }
 
-/* Улучшаем отступы в личном кабинете */
-.user-info-card {
-    margin-bottom: 32px !important;
+html.city-night .resident-name {
+    color: #f9fafb;
 }
 
-.cells-grid {
-    margin: 16px 0 32px !important;
+html.city-night .resident-stats {
+    color: #cbd5e1;
 }
 
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
-    .user-info-card {
+/* Адаптивность */
+@media (max-width: 1100px) {
+    .main-page-container {
         grid-template-columns: 1fr;
-        gap: 16px;
-        text-align: center;
+        gap: 20px;
     }
     
-    .balance-section {
-        text-align: center;
+    .residents-sidebar {
+        grid-column: 1;
     }
     
-    .user-main-info {
-        justify-content: center;
+    .residents-section {
+        position: static;
+        max-height: none;
+    }
+}
+
+/* ============= ОБНОВЛЕННАЯ СТРУКТУРА ГЛАВНОЙ СТРАНИЦЫ ============= */
+
+.main-page-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+/* Центральная колонка - сетка города */
+.city-center-section {
+    grid-column: 1;
+}
+
+/* Правая колонка - сайдбар */
+.residents-sidebar {
+    grid-column: 2;
+}
+
+/* Баланс в сайдбаре */
+.balance-section-sidebar {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+    text-align: center;
+}
+
+.balance-label-sidebar {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.balance-amount-sidebar {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #065f46;
+}
+
+.balance-subtext-sidebar {
+    font-size: 12px;
+    color: #6b5563;
+    margin-bottom: 12px;
+}
+
+.topup-btn-sidebar {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 18px;
+    color: #ecfdf5;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 24px rgba(22, 163, 74, 0.55);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    width: 100%;
+}
+
+.topup-btn-sidebar:hover {
+    transform: translateY(-1px);
+    opacity: 0.96;
+    box-shadow: 0 14px 30px rgba(22, 163, 74, 0.65);
+}
+
+.residents-section {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+
+.residents-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 16px;
+    text-align: center;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(59, 130, 246, 0.2);
+}
+
+.residents-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.resident-card {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 12px 16px;
+    border-radius: 12px;
+    text-align: left;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.2s ease;
+}
+
+.resident-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.resident-name {
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.resident-stats {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Ночная тема для сайдбара */
+html.city-night .balance-section-sidebar {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .balance-label-sidebar {
+    color: #e5e7eb;
+}
+
+html.city-night .balance-amount-sidebar {
+    color: #bbf7d0;
+}
+
+html.city-night .balance-subtext-sidebar {
+    color: #cbd5e1;
+}
+
+html.city-night .residents-section {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .residents-title {
+    color: #f9fafb;
+    border-bottom-color: rgba(59, 130, 246, 0.4);
+}
+
+html.city-night .resident-card {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(51, 65, 85, 0.9);
+}
+
+html.city-night .resident-name {
+    color: #f9fafb;
+}
+
+html.city-night .resident-stats {
+    color: #cbd5e1;
+}
+
+/* Адаптивность */
+@media (max-width: 1100px) {
+    .main-page-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
     
-    .user-stat-badges {
-        justify-content: center;
+    .residents-sidebar {
+        grid-column: 1;
     }
     
-    .stat-item {
-        padding: 10px 12px;
+    .residents-section {
+        position: static;
+        max-height: none;
     }
 }

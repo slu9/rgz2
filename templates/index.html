@@ -1,70 +1,112 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="city-wrapper">
-    <h1 class="city-title">Камера хранения "Мини-город"</h1>
+<div class="main-page-container">
+    <!-- Центральная колонка - сетка города -->
+    <div class="city-center-section">
+        <div class="city-wrapper">
+            <h1 class="city-title">Камера хранения "Мини-город"</h1>
 
-    <div class="stats-panel">
-        <div class="stat-item">
-            <span class="stat-label">Занятых ячеек:</span>
-            <span class="stat-value" id="stat-occupied">0</span>
+            <div class="stats-panel">
+                <div class="stat-item">
+                    <span class="stat-label">Занятых ячеек:</span>
+                    <span class="stat-value" id="stat-occupied">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Свободных участков:</span>
+                    <span class="stat-value" id="stat-free">{{ cells|length }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Уровень развития города:</span>
+                    <span class="stat-value" id="stat-level">0%</span>
+                </div>
+            </div>
+
+            <div class="city-grid"
+                 style="--rows: {{ rows }}; --cols: {{ cols }};">
+
+                {% for cell in cells %}
+                    <form class="cell-form"
+                          method="post"
+                          action="{{ url_for('toggle_cell', cell_id=cell.id) }}">
+
+                        <button type="button"
+                                class="cell
+                                       {% if cell.occupied %}occupied type{{ cell.building_type }}{% else %}free{% endif %}
+                                       {% if cell.owner_name == current_user and cell.occupied %}own-building{% elif cell.occupied %}foreign-building{% endif %}"
+                                data-cell-id="{{ cell.id }}"
+                                data-occupied="{{ 1 if cell.occupied else 0 }}"
+                                data-owner="{{ cell.owner_name or '' }}">
+                        </button>
+                    </form>
+                {% endfor %}
+            </div>
+
+            <div id="building-select" class="building-select hidden">
+                <div class="building-option" data-type="1">
+                    <img src="/static/img/building_shop.png">
+                    <div class="building-price">100 руб</div>
+                </div>
+                <div class="building-option" data-type="2">
+                    <img src="/static/img/building_hospital.png">
+                    <div class="building-price">150 руб</div>
+                </div>
+                <div class="building-option" data-type="3">
+                    <img src="/static/img/building_museum.png">
+                    <div class="building-price">200 руб</div>
+                </div>
+                <div class="building-option" data-type="4">
+                    <img src="/static/img/building_post.png">
+                    <div class="building-price">120 руб</div>
+                </div>
+                <div class="building-option" data-type="5">
+                    <img src="/static/img/building_hotel.png">
+                    <div class="building-price">180 руб</div>
+                </div>
+            </div>
         </div>
-        <div class="stat-item">
-            <span class="stat-label">Свободных участков:</span>
-            <span class="stat-value" id="stat-free">{{ cells|length }}</span>
-        </div>
-        <div class="stat-item">
-            <span class="stat-label">Уровень развития города:</span>
-            <span class="stat-value" id="stat-level">0%</span>
-        </div>
+    </div>
+
+    <!-- Правая колонка - сайдбар с балансом и списком жителей -->
+    <div class="residents-sidebar">
         {% if current_user %}
-        <div class="stat-item">
-            <span class="stat-label">Ваш баланс:</span>
-            <span class="stat-value">💰 {{ user_balance }} руб</span>
+        <!-- Плашка с балансом -->
+        <div class="balance-section-sidebar">
+            <div class="balance-label-sidebar">Ваш баланс</div>
+            <div class="balance-amount-sidebar">{{ user_balance }} руб</div>
+            <div class="balance-subtext-sidebar">Доступно для аренды</div>
+            <form method="POST" action="/topup">
+                <input type="hidden" name="theme" value="{{ session.theme }}">
+                <button type="submit" class="topup-btn-sidebar">Пополнить баланс</button>
+            </form>
         </div>
         {% endif %}
-    </div>
 
-    <div class="city-grid"
-         style="--rows: {{ rows }}; --cols: {{ cols }};">
-
-        {% for cell in cells %}
-            <form class="cell-form"
-                  method="post"
-                  action="{{ url_for('toggle_cell', cell_id=cell.id) }}">
-
-                <button type="button"
-                        class="cell
-                               {% if cell.occupied %}occupied type{{ cell.building_type }}{% else %}free{% endif %}
-                               {% if cell.owner_name == current_user and cell.occupied %}own-building{% elif cell.occupied %}foreign-building{% endif %}"
-                        data-cell-id="{{ cell.id }}"
-                        data-occupied="{{ 1 if cell.occupied else 0 }}"
-                        data-owner="{{ cell.owner_name or '' }}">
-                </button>
-            </form>
-        {% endfor %}
-    </div>
-
-    <div id="building-select" class="building-select hidden">
-        <div class="building-option" data-type="1">
-            <img src="/static/img/building_shop.png">
-            <div class="building-price">100 руб</div>
-        </div>
-        <div class="building-option" data-type="2">
-            <img src="/static/img/building_hospital.png">
-            <div class="building-price">150 руб</div>
-        </div>
-        <div class="building-option" data-type="3">
-            <img src="/static/img/building_museum.png">
-            <div class="building-price">200 руб</div>
-        </div>
-        <div class="building-option" data-type="4">
-            <img src="/static/img/building_post.png">
-            <div class="building-price">120 руб</div>
-        </div>
-        <div class="building-option" data-type="5">
-            <img src="/static/img/building_hotel.png">
-            <div class="building-price">180 руб</div>
+        <!-- Список жителей -->
+        <div class="residents-section">
+            <h2 class="residents-title">🏘️ Жители города</h2>
+            <div class="residents-grid">
+                {% set unique_owners = [] %}
+                {% for cell in cells %}
+                    {% if cell.owner_name and cell.owner_name not in unique_owners %}
+                        {% set _ = unique_owners.append(cell.owner_name) %}
+                        <div class="resident-card">
+                            <div class="resident-name">{{ cell.owner_name }}</div>
+                            <div class="resident-stats">
+                                {% set owner_cells = cells|selectattr("owner_name", "equalto", cell.owner_name)|list %}
+                                {{ owner_cells|length }} ячейка(ек)
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                {% if unique_owners|length == 0 %}
+                    <div class="resident-card">
+                        <div class="resident-name">Пока нет жителей</div>
+                        <div class="resident-stats">Станьте первым!</div>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
