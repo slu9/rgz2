@@ -1124,6 +1124,13 @@ html.city-night .cell-number {
     color: #f9fafb;
 }
 
+html.city-night .no-cells {
+    background: rgba(15, 23, 42, 0.9);
+    color: #e5e7eb;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
 html.city-night .cell-type {
     color: #d1d5db;
 }
@@ -1543,5 +1550,31 @@ html.city-night .resident-stats {
     .residents-section {
         position: static;
         max-height: none;
+    }
+}
+
+.cell.occupied.built-on-load::before {
+    opacity: 0; /* Сначала полностью прозрачный */
+    animation:
+        rise-building 0.7s ease-out forwards,
+        glow-build 1.5s ease-in-out 0.4s;
+}
+
+/* Упрощенная анимация */
+@keyframes rise-building {
+    0% {
+        opacity: 0;
+        transform: translateY(50%) scaleY(0.1);
+    }
+    20% {
+        opacity: 1; /* Быстро появляемся в начале анимации */
+        transform: translateY(40%) scaleY(0.2);
+    }
+    60% {
+        transform: translateY(-5%) scaleY(1.1);
+    }
+    100% {
+        transform: translateY(0) scaleY(1);
+        opacity: 1;
     }
 }
