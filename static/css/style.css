@@ -1,12 +1,10 @@
-/* ============= СБРОС ============= */
+
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
-
-/* ============= БАЗА ============= */
 
 html {
     scroll-behavior: smooth;
@@ -23,7 +21,7 @@ body {
     overflow-x: hidden;
 }
 
-/* ФОН ГОРОДА (день/ночь) */
+/* Фон (день/ночь) */
 html.city-day {
     background: url("/static/img/day.png") center top / cover no-repeat fixed;
 }
@@ -66,7 +64,6 @@ body,
         opacity 0.35s ease;
 }
 
-/* но для hover оставляем короткие анимации */
 .cell.free:hover,
 .theme-btn:hover,
 .auth-button:hover,
@@ -76,7 +73,7 @@ body,
     transition: all 0.2s ease !important;
 }
 
-/* ============= ШАПКА ============= */
+/* Шапка */
 
 .main-header {
     display: flex;
@@ -96,7 +93,6 @@ body,
     font-weight: 700;
 }
 
-/* логотип (день) */
 .logo-city {
     color: #0f172a;
 }
@@ -105,7 +101,6 @@ body,
     color: #8f4a00;
 }
 
-/* меню */
 .main-nav {
     display: flex;
     align-items: center;
@@ -122,14 +117,12 @@ body,
     color: #ff4f9a;
 }
 
-/* имя и подпись студента (день) */
 .student-info,
 .user-name {
     font-size: 14px;
     color: #4b5563;
 }
 
-/* кнопка переключения темы */
 .theme-btn {
     padding: 6px 14px;
     background-color: rgba(255,255,255,0.9);
@@ -139,7 +132,7 @@ body,
     font-size: 14px;
 }
 
-/* ============= НОЧНАЯ ТЕМА ДЛЯ ШАПКИ ============= */
+/* ночная тема для шапки */
 
 html.city-night .main-header {
     background-color: rgba(15, 23, 42, 0.9);
@@ -157,7 +150,6 @@ html.city-night .logo-storage {
     text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
 }
 
-/* ссылки и текст ночью */
 html.city-night .main-nav a,
 html.city-night .student-info,
 html.city-night .user-name {
@@ -168,7 +160,6 @@ html.city-night .main-nav a:hover {
     color: #ff9ac8;
 }
 
-/* кнопка темы ночью */
 html.city-night .theme-btn {
     background-color: rgba(15, 23, 42, 0.7);
     color: #e5e7eb;
@@ -179,7 +170,7 @@ html.city-night .theme-btn:hover {
     background-color: rgba(15, 23, 42, 0.9);
 }
 
-/* ============= ОСНОВНОЙ КОНТЕЙНЕР ============= */
+/* основной контейнер */
 
 .page-content {
     flex: 1;
@@ -188,7 +179,7 @@ html.city-night .theme-btn:hover {
     justify-content: center;
 }
 
-/* ============= КАРТОЧКА ГОРОДА / ОБЩИЙ КОНТЕЙНЕР ============= */
+/* общий контейнер */
 
 .city-wrapper {
     position: relative;
@@ -215,7 +206,7 @@ html.city-night .theme-btn:hover {
     color: #0f172a;
 }
 
-/* ============= ПАНЕЛЬ СТАТИСТИКИ ============= */
+/* статистика */
 
 .stats-panel {
     display: flex;
@@ -254,52 +245,7 @@ html.city-night .theme-btn:hover {
     color: #111827;
 }
 
-/* ============= СПИСОК ЖИТЕЛЕЙ ============= */
-
-.residents-section {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-}
-
-.residents-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 16px;
-    text-align: center;
-}
-
-.residents-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-}
-
-.resident-card {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 12px 16px;
-    border-radius: 12px;
-    text-align: center;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.resident-name {
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 4px;
-}
-
-.resident-stats {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-/* ============= СЕТКА ГОРОДА ============= */
+/* сетка города */
 
 .city-grid {
     display: grid;
@@ -312,7 +258,6 @@ html.city-night .theme-btn:hover {
     margin: 0 auto 24px;
 }
 
-/* форма-контейнер ячейки */
 .cell-form {
     margin: 0;
     padding: 0;
@@ -321,7 +266,6 @@ html.city-night .theme-btn:hover {
     height: 100%;
 }
 
-/* кнопка-ячейка */
 .cell {
     width: 100%;
     height: 100%;
@@ -339,7 +283,6 @@ html.city-night .theme-btn:hover {
     font-size: 0;
 }
 
-/* свободная ячейка — земля */
 .cell.free {
     background-image: url("/static/img/ground.png") !important;
     background-repeat: no-repeat;
@@ -353,13 +296,11 @@ html.city-night .theme-btn:hover {
     transform: translateY(-1px);
 }
 
-/* занятая ячейка — фон прозрачный, только домик */
 .cell.occupied {
     background: transparent;
     box-shadow: none;
 }
 
-/* контейнер для картинки дома */
 .cell.occupied::before {
     content: "";
     position: absolute;
@@ -373,21 +314,18 @@ html.city-night .theme-btn:hover {
     transform-origin: bottom;
 }
 
-/* разные типы зданий */
 .type1.occupied::before { background-image: url("/static/img/building_shop.png"); }
 .type2.occupied::before { background-image: url("/static/img/building_hospital.png"); }
 .type3.occupied::before { background-image: url("/static/img/building_museum.png"); }
 .type4.occupied::before { background-image: url("/static/img/building_post.png"); }
 .type5.occupied::before { background-image: url("/static/img/building_hotel.png"); }
 
-/* подсветка при наведении на дом */
 .cell.occupied:hover::before {
     filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.9));
 }
 
-/* ===== ПОМЕТКА СВОИХ И ЧУЖИХ ДОМОВ ===== */
+/* пометка владельцев */
 
-/* СВОИ дома — яркая мятная подсветка и "пульс" */
 .cell.occupied.own-building::before {
     filter: drop-shadow(0 0 12px rgba(52, 211, 153, 0.8));
     animation: pulse-glow 2s infinite;
@@ -398,7 +336,6 @@ html.city-night .theme-btn:hover {
     50% { filter: drop-shadow(0 0 15px rgba(52, 211, 153, 1)); }
 }
 
-/* ЧУЖИЕ дома — чуть тусклее и с замочком */
 .cell.occupied.foreign-building::before {
     opacity: 0.8;
     filter: grayscale(0.15);
@@ -413,12 +350,11 @@ html.city-night .theme-btn:hover {
     text-shadow: 0 0 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Убираем замочек у своих домов */
 .cell.occupied.own-building::after {
     display: none !important;
 }
 
-/* ============= ФОРМЫ АВТОРИЗАЦИИ ============= */
+/* формы авторизации */
 
 .auth-form {
     max-width: 360px;
@@ -474,7 +410,7 @@ html.city-night .theme-btn:hover {
     color: #6b7280;
 }
 
-/* ============= ФЛЕШ-СООБЩЕНИЯ ============= */
+/* флеш сообщения */
 
 .flash-container {
     position: fixed;
@@ -501,7 +437,7 @@ html.city-night .theme-btn:hover {
     transform: translateY(-8px);
 }
 
-/* ============= МЕНЮ ВЫБОРА ДОМА ============= */
+/* выбор дома */
 
 .building-select {
     position: absolute;
@@ -548,7 +484,6 @@ html.city-night .theme-btn:hover {
     border-color: rgba(59,130,246,0.4);
 }
 
-/* Цены в меню выбора */
 .building-price {
     position: absolute;
     bottom: -20px;
@@ -565,7 +500,7 @@ html.city-night .theme-btn:hover {
     z-index: 1;
 }
 
-/* ============= ЛИЧНЫЙ КАБИНЕТ ============= */
+/* личный кабинет */
 
 .profile-header {
     margin-bottom: 24px;
@@ -589,7 +524,6 @@ html.city-night .theme-btn:hover {
     color: #6b7280;
 }
 
-/* основной блок личного кабинета */
 .user-info-card {
     background: rgba(255, 255, 255, 0.75);
     border-radius: 24px;
@@ -604,7 +538,6 @@ html.city-night .theme-btn:hover {
     backdrop-filter: blur(16px);
 }
 
-/* левая часть – данные пользователя */
 .user-main-info {
     display: flex;
     align-items: center;
@@ -637,13 +570,11 @@ html.city-night .theme-btn:hover {
     color: #111827;
 }
 
-/* Убираем вывод логина */
 .user-main-text .user-group,
 .user-main-text .user-note {
     display: none !important;
 }
 
-/* маленькие статистические бейджи под аватаркой */
 .user-stat-badges {
     display: flex;
     flex-wrap: wrap;
@@ -662,7 +593,6 @@ html.city-night .theme-btn:hover {
     backdrop-filter: blur(5px);
 }
 
-/* правая часть – баланс */
 .balance-section {
     text-align: right;
 }
@@ -791,7 +721,6 @@ html.city-night .theme-btn:hover {
     border: 1px dashed rgba(148, 163, 184, 0.8);
 }
 
-/* баланс в шапке */
 .user-balance {
     background: rgba(34, 197, 94, 0.16);
     padding: 4px 12px;
@@ -802,7 +731,7 @@ html.city-night .theme-btn:hover {
     color: #065f46;
 }
 
-/* ============= ТАРИФЫ И ПРАВИЛА ============= */
+/* тарифы и правила */
 
 .pricing-section,
 .rules-section,
@@ -816,7 +745,6 @@ html.city-night .theme-btn:hover {
     border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-/* большой заголовок "Тарифы и правила" */
 .pricing-section > h2 {
     display: inline-flex;
     align-items: center;
@@ -844,7 +772,6 @@ html.city-night .theme-btn:hover {
     color: #6b7280;
 }
 
-/* грид тарифов */
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -870,7 +797,6 @@ html.city-night .theme-btn:hover {
     border-color: rgba(59, 130, 246, 0.7);
 }
 
-/* Добавляем изображения домов в карточки тарифов */
 .price-card[data-building-type="1"]::before {
     content: "";
     position: absolute;
@@ -951,7 +877,6 @@ html.city-night .theme-btn:hover {
     z-index: 1;
 }
 
-/* Убираем дублирование названий в тарифах */
 .price-pill {
     display: none;
 }
@@ -984,7 +909,6 @@ html.city-night .theme-btn:hover {
     color: #4b5563;
 }
 
-/* Список преимуществ в карточках */
 .price-features {
     list-style: none;
     padding: 0;
@@ -1012,7 +936,6 @@ html.city-night .theme-btn:hover {
     border-bottom: none;
 }
 
-/* блок правил */
 .rules-section > h2,
 .terms-section > h2,
 .support-section > h2 {
@@ -1059,7 +982,6 @@ html.city-night .theme-btn:hover {
     margin-bottom: 6px;
 }
 
-/* список терминов / условий */
 .terms-list {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
@@ -1079,7 +1001,6 @@ html.city-night .theme-btn:hover {
     border-bottom: none;
 }
 
-/* контакты поддержки */
 .contact-info {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
@@ -1099,24 +1020,21 @@ html.city-night .theme-btn:hover {
     text-decoration: underline;
 }
 
-/* ============= НОЧНАЯ ТЕМА ============= */
+/* ночная тема */
 
 html.city-night body {
     color: #e5e7eb;
 }
 
-/* Карточка города ночью */
 html.city-night .city-wrapper {
     background: rgba(15, 23, 42, 0.9);
 }
 
-/* Заголовок ночью */
 html.city-night .city-title,
 html.city-night .auth-title {
     color: #e5e7eb;
 }
 
-/* Панель статистики ночью */
 html.city-night .stats-panel {
     background: rgba(15, 23, 42, 0.9);
 }
@@ -1134,30 +1052,6 @@ html.city-night .stat-value {
     color: #f9fafb;
 }
 
-/* Список жителей ночью */
-html.city-night .residents-section {
-    background: rgba(15, 23, 42, 0.9);
-    border-color: rgba(51, 65, 85, 0.9);
-}
-
-html.city-night .residents-title {
-    color: #f9fafb;
-}
-
-html.city-night .resident-card {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: rgba(51, 65, 85, 0.9);
-}
-
-html.city-night .resident-name {
-    color: #f9fafb;
-}
-
-html.city-night .resident-stats {
-    color: #cbd5e1;
-}
-
-/* Формы авторизации ночью */
 html.city-night .auth-form {
     background: rgba(15, 23, 42, 0.96);
     color: #e5e7eb;
@@ -1181,7 +1075,6 @@ html.city-night .auth-note {
     color: #cbd5e1;
 }
 
-/* Меню выбора дома ночью */
 html.city-night .building-select {
     background: rgba(15, 23, 42, 0.97);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1193,7 +1086,6 @@ html.city-night .building-price {
     border-color: rgba(52, 211, 153, 0.3);
 }
 
-/* Личный кабинет ночью */
 html.city-night .user-info-card {
     background: radial-gradient(circle at 0% 0%, #1e293b 0, #020617 55%, #111827 100%);
     border-color: rgba(30, 64, 175, 0.7);
@@ -1254,7 +1146,6 @@ html.city-night .user-balance {
     border-color: rgba(74, 222, 128, 0.7);
 }
 
-/* Тарифы ночью */
 html.city-night .pricing-section,
 html.city-night .rules-section,
 html.city-night .terms-section,
@@ -1316,7 +1207,7 @@ html.city-night .term-item {
     border-bottom-color: rgba(55, 65, 81, 0.9);
 }
 
-/* ============= МОДАЛЬНЫЕ ОКНА ============= */
+/* модальные окна */
 
 .confirm-modal {
     position: fixed;
@@ -1402,7 +1293,6 @@ html.city-night .term-item {
     box-shadow: 0 10px 24px rgba(248, 113, 113, 0.55);
 }
 
-/* ночной вариант модалки */
 html.city-night .confirm-window {
     background: rgba(15, 23, 42, 0.97);
     color: #f9fafb;
@@ -1412,7 +1302,6 @@ html.city-night .confirm-text {
     color: #cbd5e1;
 }
 
-/* Тултип */
 .cell-tooltip {
     position: absolute;
     padding: 6px 10px;
@@ -1423,7 +1312,7 @@ html.city-night .confirm-text {
     pointer-events: none;
     white-space: nowrap;
     z-index: 2000;
-    transform: translate(-50%, -120%);
+    transform: translateX(-50%);
     opacity: 0;
     transition: opacity .15s ease-out;
 }
@@ -1436,77 +1325,7 @@ html.city-night .confirm-text {
     display: none;
 }
 
-/* ============= АДАПТИВ ============= */
-
-@media (max-width: 1100px) {
-    .city-grid {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .rules-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 900px) {
-    .rules-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .main-header {
-        padding: 12px 16px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .main-nav {
-        gap: 8px;
-    }
-
-    .page-content {
-        padding: 16px;
-    }
-
-    .pricing-section,
-    .rules-section,
-    .terms-section,
-    .support-section {
-        padding: 18px 16px 20px;
-        border-radius: 20px;
-    }
-
-    .cells-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .building-select {
-        gap: 10px;
-        padding: 10px 12px 20px;
-    }
-
-    .building-option {
-        width: 60px;
-        height: 60px;
-    }
-
-    .user-info-card {
-        grid-template-columns: 1fr;
-        text-align: left;
-    }
-
-    .balance-section {
-        text-align: left;
-    }
-
-    .residents-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ============= АНИМАЦИЯ ПОСТРОЙКИ ============= */
+/* анимация постройки */
 
 @keyframes rise-building {
     0% {
@@ -1535,131 +1354,13 @@ html.city-night .confirm-text {
     }
 }
 
-/* Анимация постройки здания (подъём + сияние) */
 .cell.occupied.built-on-load::before {
     animation:
         rise-building 0.6s ease-out forwards,
         glow-build 1.5s ease-in-out;
 }
 
-/* ============= ОБНОВЛЕННАЯ СТРУКТУРА ГЛАВНОЙ СТРАНИЦЫ ============= */
-
-.main-page-container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 24px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-/* Левая колонка - сетка города */
-.city-main-section {
-    grid-column: 1;
-}
-
-/* Правая колонка - список жителей */
-.residents-sidebar {
-    grid-column: 2;
-}
-
-.residents-section {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
-    position: sticky;
-    top: 100px;
-    max-height: calc(100vh - 140px);
-    overflow-y: auto;
-}
-
-.residents-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 16px;
-    text-align: center;
-    padding-bottom: 12px;
-    border-bottom: 2px solid rgba(59, 130, 246, 0.2);
-}
-
-.residents-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.resident-card {
-    background: rgba(255, 255, 255, 0.8);
-    padding: 12px 16px;
-    border-radius: 12px;
-    text-align: left;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    transition: all 0.2s ease;
-}
-
-.resident-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.resident-name {
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 4px;
-    font-size: 14px;
-}
-
-.resident-stats {
-    font-size: 12px;
-    color: #6b7280;
-}
-
-/* Ночная тема для сайдбара */
-html.city-night .residents-section {
-    background: rgba(15, 23, 42, 0.9);
-    border-color: rgba(51, 65, 85, 0.9);
-}
-
-html.city-night .residents-title {
-    color: #f9fafb;
-    border-bottom-color: rgba(59, 130, 246, 0.4);
-}
-
-html.city-night .resident-card {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: rgba(51, 65, 85, 0.9);
-}
-
-html.city-night .resident-name {
-    color: #f9fafb;
-}
-
-html.city-night .resident-stats {
-    color: #cbd5e1;
-}
-
-/* Адаптивность */
-@media (max-width: 1100px) {
-    .main-page-container {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .residents-sidebar {
-        grid-column: 1;
-    }
-    
-    .residents-section {
-        position: static;
-        max-height: none;
-    }
-}
-
-/* ============= ОБНОВЛЕННАЯ СТРУКТУРА ГЛАВНОЙ СТРАНИЦЫ ============= */
+/* структура гл стр */
 
 .main-page-container {
     display: grid;
@@ -1670,17 +1371,14 @@ html.city-night .resident-stats {
     align-items: start;
 }
 
-/* Центральная колонка - сетка города */
 .city-center-section {
     grid-column: 1;
 }
 
-/* Правая колонка - сайдбар */
 .residents-sidebar {
     grid-column: 2;
 }
 
-/* Баланс в сайдбаре */
 .balance-section-sidebar {
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);

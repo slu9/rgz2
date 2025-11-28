@@ -4,19 +4,32 @@
     <meta charset="utf-8">
     <title>City Storage – камера хранения</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+    (() => {
+        const theme = localStorage.getItem("theme") || "day";
+        if (theme === "night") {
+            document.documentElement.classList.add("city-night");
+        } else {
+            document.documentElement.classList.add("city-day");
+        }
+    })();
+    </script>
 
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='img/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="preload" as="image" href="{{ url_for('static', filename='img/day.png') }}">
     <link rel="preload" as="image" href="{{ url_for('static', filename='img/night.png') }}">
-    
-    <!-- Предзагрузка тем для мгновенного переключения -->
+
     <style>
         .city-day, .city-night {
             transition: none !important;
         }
     </style>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/favicon.png') }}">
+    
 </head>
 
 <body data-username="{{ current_user or '' }}">
@@ -53,7 +66,6 @@
 </header>
 
 <main class="page-content">
-    {# флеш-сообщения #}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="flash-container">
@@ -66,11 +78,9 @@
 
     {% block content %}{% endblock %}
 
-    <!-- тултип для "Мой дом / Дом пользователя / Свободный участок" -->
     <div id="cell-tooltip" class="cell-tooltip hidden"></div>
 </main>
 
-<!-- Красивое модальное окно подтверждения удаления дома -->
 <div id="deleteModal" class="confirm-modal hidden">
     <div class="confirm-backdrop"></div>
     <div class="confirm-window">

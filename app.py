@@ -1,7 +1,6 @@
 import os
 import sqlite3
 import hashlib
-import random
 from datetime import datetime, timedelta
 from flask import (
     Flask, render_template, request,
@@ -13,7 +12,6 @@ app.secret_key = "change-me"
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "database", "storage.db")
 
-# ------------------ Вспомогательные функции ------------------
 
 def get_student_info():
     return "Зырянова Софья", "ФБИ-34"
@@ -28,13 +26,11 @@ def get_current_theme():
     """Получаем текущую тему из формы или сессии"""
     return request.form.get('theme', session.get('theme', 'day'))
 
-# ------------------ Главная страница ------------------
 
 @app.route("/")
 def index():
     student_name, student_group = get_student_info()
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
@@ -49,7 +45,6 @@ def index():
     """)
     rows = cursor.fetchall()
     
-    # Получаем баланс текущего пользователя
     user_balance = 0
     if session.get("user_id"):
         cursor.execute("SELECT balance FROM users WHERE id = ?;", (session["user_id"],))
@@ -79,7 +74,6 @@ def index():
         user_balance=user_balance
     )
 
-# ------------------ Регистрация ------------------
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -119,7 +113,6 @@ def register():
 
         return redirect(url_for("login"))
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
@@ -129,8 +122,6 @@ def register():
         student_group=student_group,
         current_user=session.get("name")
     )
-
-# ------------------ Вход ------------------
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -155,7 +146,6 @@ def login():
             session["name"] = user[1]
             session["balance"] = user[2]
             
-            # Сохраняем тему
             theme = get_current_theme()
             session['theme'] = theme
             
@@ -165,7 +155,6 @@ def login():
             flash("Неверный логин или пароль.")
             return redirect(url_for("login"))
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
@@ -176,15 +165,12 @@ def login():
         current_user=session.get("name")
     )
 
-# ------------------ Выход ------------------
-
 @app.route("/logout")
 def logout():
     session.clear()
     flash("Вы вышли из аккаунта.")
     return redirect(url_for("index"))
 
-# ------------------ Бронирование ячейки ------------------
 
 @app.route("/cell/<int:cell_id>/build/<int:building_type>", methods=["POST"])
 def build_cell(cell_id, building_type):
@@ -193,18 +179,14 @@ def build_cell(cell_id, building_type):
         flash("Сначала войдите в аккаунт.")
         return redirect(url_for("login"))
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
     conn = get_db()
     cursor = conn.cursor()
-
-    # Проверяем баланс пользователя
     cursor.execute("SELECT balance FROM users WHERE id = ?;", (user_id,))
     user_balance = cursor.fetchone()[0]
 
-    # Стоимость аренды в зависимости от типа здания
     rental_prices = {1: 100, 2: 150, 3: 200, 4: 120, 5: 180}
     price = rental_prices.get(building_type, 100)
 
@@ -213,7 +195,6 @@ def build_cell(cell_id, building_type):
         flash(f"Недостаточно средств. Стоимость аренды: {price} руб. Ваш баланс: {user_balance} руб.")
         return redirect(url_for("index"))
 
-    # проверяем, свободна ли ячейка
     cursor.execute("SELECT user_id FROM cells WHERE id = ?", (cell_id,))
     row = cursor.fetchone()
 
@@ -228,7 +209,6 @@ def build_cell(cell_id, building_type):
         flash("Эта ячейка уже занята!")
         return redirect(url_for("index"))
 
-    # считаем сколько уже занято
     cursor.execute("SELECT COUNT(*) FROM cells WHERE user_id = ?", (user_id,))
     count = cursor.fetchone()[0]
 
@@ -237,7 +217,6 @@ def build_cell(cell_id, building_type):
         flash("Нельзя занять больше 5 ячеек.")
         return redirect(url_for("index"))
 
-    # Списываем деньги и бронируем ячейку
     cursor.execute(
         "UPDATE users SET balance = balance - ? WHERE id = ?;",
         (price, user_id)
@@ -248,17 +227,14 @@ def build_cell(cell_id, building_type):
         (user_id, building_type, cell_id)
     )
     
-    # Обновляем баланс в сессии
     session["balance"] = user_balance - price
     
     conn.commit()
     conn.close()
 
     flash(f"Ячейка успешно арендована за {price} руб! На балансе осталось: {user_balance - price} руб.")
-    # передаём номер ячейки, чтобы на фронте её подсветить и проскроллить
     return redirect(url_for("index", new_building=cell_id))
 
-# ------------------ Освобождение ячейки ------------------
 
 @app.route("/cell/<int:cell_id>/toggle", methods=["POST"])
 def toggle_cell(cell_id):
@@ -267,17 +243,14 @@ def toggle_cell(cell_id):
         flash("Авторизуйтесь, чтобы управлять ячейками.")
         return redirect(url_for("login"))
 
-    # Сохраняем тему
     theme = request.form.get('theme', session.get('theme', 'day'))
     session['theme'] = theme
 
-    # понять, откуда пришёл запрос (профиль или карта)
     from_profile = request.form.get("from_profile") == "1"
 
     conn = get_db()
     cursor = conn.cursor()
 
-    # узнаём владельца ячейки
     cursor.execute("SELECT user_id FROM cells WHERE id = ?;", (cell_id,))
     row = cursor.fetchone()
 
@@ -288,7 +261,6 @@ def toggle_cell(cell_id):
 
     current_owner = row[0]
 
-    # ---------- Своя ячейка → освободить ----------
     if current_owner == user_id:
         cursor.execute(
             "UPDATE cells SET user_id = NULL, building_type = NULL WHERE id = ?;",
@@ -298,13 +270,10 @@ def toggle_cell(cell_id):
         conn.close()
         flash(f"Ячейка {cell_id} освобождена.")
 
-        # если освобождали из профиля — остаёмся в профиле
         if from_profile:
             return redirect(url_for("profile"))
-        # если кликали на карте — возвращаемся на карту и скроллим к ячейке
         return redirect(url_for("index", removed_cell=cell_id))
 
-    # ---------- Чужая ячейка ----------
     cursor.execute("""
         SELECT users.name
         FROM cells
@@ -318,8 +287,6 @@ def toggle_cell(cell_id):
     flash(f"Эта ячейка уже арендована пользователем: {owner_name}.")
     return redirect(url_for("index"))
 
-# ------------------ Пополнение баланса ------------------
-
 @app.route("/topup", methods=["POST"])
 def topup_balance():
     user_id = session.get("user_id")
@@ -327,11 +294,10 @@ def topup_balance():
         flash("Сначала войдите в аккаунт.")
         return redirect(url_for("login"))
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
-    amount = 1000  # Фиксированное пополнение на 1000 рублей
+    amount = 1000  
 
     conn = get_db()
     cursor = conn.cursor()
@@ -341,7 +307,6 @@ def topup_balance():
         (amount, user_id)
     )
     
-    # Обновляем баланс в сессии
     cursor.execute("SELECT balance FROM users WHERE id = ?;", (user_id,))
     new_balance = cursor.fetchone()[0]
     session["balance"] = new_balance
@@ -352,8 +317,6 @@ def topup_balance():
     flash(f"Баланс успешно пополнен на {amount} руб! Текущий баланс: {new_balance} руб.")
     return redirect(url_for("profile"))
 
-# ------------------ Личный кабинет ------------------
-
 @app.route("/profile")
 def profile():
     if not session.get("user_id"):
@@ -362,14 +325,12 @@ def profile():
 
     student_name, student_group = get_student_info()
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
     conn = get_db()
     cursor = conn.cursor()
 
-    # Получаем данные пользователя
     cursor.execute("""
         SELECT name, login, balance 
         FROM users 
@@ -377,7 +338,6 @@ def profile():
     """, (session["user_id"],))
     user_data = cursor.fetchone()
 
-    # Получаем арендованные ячейки пользователя
     cursor.execute("""
         SELECT id, building_type 
         FROM cells 
@@ -415,13 +375,11 @@ def profile():
         user_balance_display=user_data[2]
     )
 
-# ------------------ Тарифы и правила ------------------
 
 @app.route("/pricing")
 def pricing():
     student_name, student_group = get_student_info()
 
-    # Сохраняем тему
     theme = get_current_theme()
     session['theme'] = theme
 
@@ -440,10 +398,6 @@ def pricing():
         student_group=student_group,
         current_user=session.get("name")
     )
-
-
-
-# ------------------ Запуск ------------------
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

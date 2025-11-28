@@ -18,7 +18,7 @@
                 <form method="POST" action="{{ url_for('topup_balance') }}" class="topup-form">
                     <input type="hidden" name="theme" value="{{ session.get('theme', 'day') }}">
                     <button type="submit" class="auth-button topup-btn">
-                        Пополнить на 1000 руб
+                        Пополнить
                     </button>
                 </form>
             </div>
@@ -58,10 +58,6 @@
             <div class="stat-item">
                 <span class="stat-label">Арендовано ячеек:</span>
                 <span class="stat-value">{{ user_cells|length }}/5</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Общая стоимость:</span>
-                <span class="stat-value">{{ user_balance }} руб</span>
             </div>
         </div>
     </div>

@@ -1,5 +1,3 @@
-// static/js/city.js
-
 document.addEventListener("DOMContentLoaded", () => {
     const html = document.documentElement;
     const wrapper = document.querySelector(".city-wrapper");
@@ -13,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalCancel = document.getElementById("modal-cancel");
     let pendingDeleteCellId = null;
 
-    // имя текущего пользователя (для "Мой дом")
     const currentUser = (document.body.dataset.username || "").trim();
 
     let selectedCellId = null;
@@ -22,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return Array.from(document.querySelectorAll(".city-grid .cell"));
     }
 
-    // ---------- СТАТИСТИКА ----------
+    // статистика
     const statOccupied = document.getElementById("stat-occupied");
     const statFree = document.getElementById("stat-free");
     const statLevel = document.getElementById("stat-level");
@@ -32,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!cells.length) return;
 
         const total = cells.length;
-        // считаем по data-occupied
         const occupied = cells.filter(c => c.dataset.occupied === "1").length;
         const free = total - occupied;
 
@@ -46,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     recalcStats();
 
-    // ---------- ТЕМА (day/night) ----------
+    // тема (day/night)
     function saveTheme() {
         const theme = html.classList.contains("city-night") ? "night" : "day";
         localStorage.setItem("theme", theme);
@@ -84,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ---------- СКРОЛЛ / АНИМАЦИЯ ПОСЛЕ POST ----------
+    // скролл и анимация
 
     function focusCellByParam() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -97,26 +93,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const cell = document.querySelector(`.cell[data-cell-id="${targetId}"]`);
         if (!cell) return;
 
-        // если дом только что построен – анимация
         if (newCellId && cell.classList.contains("occupied")) {
             cell.classList.add("built-on-load");
             setTimeout(() => cell.classList.remove("built-on-load"), 600);
         }
 
-        // плавно проскроллить к ячейке
         cell.scrollIntoView({
             behavior: "smooth",
             block: "center"
         });
 
-        // убрать параметры из URL, чтобы анимация не повторялась
         const newUrl = window.location.pathname;
         history.replaceState({}, "", newUrl);
     }
 
     focusCellByParam();
 
-    // ---------- МЕНЮ ВЫБОРА ДОМА (ПОД ЯЧЕЙКОЙ) ----------
+    // выбор дома
     if (selectMenu && wrapper) {
         document.querySelectorAll(".cell.free").forEach(cell => {
             cell.addEventListener("click", (e) => {
@@ -135,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 let left = cellRect.left - wrapperRect.left + cellRect.width / 2 - menuRect.width / 2;
                 let top = cellRect.bottom - wrapperRect.top + 12;
 
-                // держим меню в пределах карточки
                 left = Math.max(12, Math.min(left, wrapperRect.width - menuRect.width - 12));
                 top = Math.max(12, Math.min(top, wrapperRect.height - menuRect.height - 12));
 
@@ -155,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 form.method = "POST";
                 form.action = `/cell/${selectedCellId}/build/${type}`;
 
-                // прокидываем ТЕКУЩУЮ тему
                 const themeInput = document.createElement("input");
                 themeInput.type = "hidden";
                 themeInput.name = "theme";
@@ -167,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // клик вне меню — закрыть
         document.addEventListener("click", (e) => {
             if (!selectMenu.contains(e.target) && !e.target.closest(".cell.free")) {
                 selectMenu.classList.add("hidden");
@@ -175,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ---------- МОДАЛКА УДАЛЕНИЯ ДОМА ----------
+    // удаление дома
     function openDeleteModal(cellId) {
         pendingDeleteCellId = cellId;
         if (deleteModal) {
@@ -218,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // закрытие по клику по фону модалки
     if (deleteModal) {
         deleteModal.addEventListener("click", (e) => {
             if (e.target === deleteModal) {
@@ -227,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ---------- КЛИК ПО ЗАНЯТОЙ ЯЧЕЙКЕ ----------
+    // клик по занятой ячейке
     document.querySelectorAll(".cell.occupied").forEach(cell => {
         cell.addEventListener("click", (e) => {
             e.preventDefault();
@@ -236,13 +225,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const owner = (cell.dataset.owner || "").trim();
             const isOwn = owner === currentUser;
 
-            // свои дома — через модалку подтверждения
             if (isOwn && deleteModal) {
                 openDeleteModal(cellId);
                 return;
             }
 
-            // чужие ячейки — сразу отправляем форму
             const form = document.createElement("form");
             form.method = "POST";
             form.action = `/cell/${cellId}/toggle`;
@@ -257,10 +244,10 @@ document.addEventListener("DOMContentLoaded", () => {
             form.submit();
         });
     });
-// ---------- ПОДСКАЗКА "МОЙ ДОМ" / "ДОМ ПОЛЬЗОВАТЕЛЯ" ----------
-    if (tooltip && wrapper) {
+    // подсказка о владельце дома
+    if (tooltip) {
         getCells().forEach(cell => {
-            cell.addEventListener("mouseenter", (e) => {
+            cell.addEventListener("mouseenter", () => {
                 const owner = (cell.dataset.owner || "").trim();
 
                 if (owner && currentUser && owner === currentUser) {
@@ -275,17 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 tooltip.classList.add("visible");
 
                 const cellRect = cell.getBoundingClientRect();
-                const wrapperRect = wrapper.getBoundingClientRect();
-                const tooltipRect = tooltip.getBoundingClientRect();
 
-                // Позиционируем тултип точно над ячейкой
-                let left = cellRect.left - wrapperRect.left + cellRect.width / 2;
-                let top = cellRect.top - wrapperRect.top - tooltipRect.height - 8;
-
-                // Корректируем позицию, чтобы тултип не выходил за границы wrapper
-                left = Math.max(tooltipRect.width / 2, 
-                            Math.min(left, wrapperRect.width - tooltipRect.width / 2));
-                top = Math.max(10, top);
+                const left = cellRect.left + cellRect.width / 2 + window.scrollX;
+                const top = cellRect.top - 10 + window.scrollY; // на 10px выше ячейки
 
                 tooltip.style.left = left + "px";
                 tooltip.style.top = top + "px";
@@ -298,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-    // ---------- АВТО-СКРЫТИЕ ФЛЕШ-СООБЩЕНИЙ ----------
+    // скрытие флеш сообщений
     const flashes = document.querySelectorAll(".flash-message");
     if (flashes.length) {
         setTimeout(() => {

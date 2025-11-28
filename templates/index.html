@@ -2,7 +2,6 @@
 
 {% block content %}
 <div class="main-page-container">
-    <!-- Центральная колонка - сетка города -->
     <div class="city-center-section">
         <div class="city-wrapper">
             <h1 class="city-title">Камера хранения "Мини-город"</h1>
@@ -67,10 +66,8 @@
         </div>
     </div>
 
-    <!-- Правая колонка - сайдбар с балансом и списком жителей -->
     <div class="residents-sidebar">
         {% if current_user %}
-        <!-- Плашка с балансом -->
         <div class="balance-section-sidebar">
             <div class="balance-label-sidebar">Ваш баланс</div>
             <div class="balance-amount-sidebar">{{ user_balance }} руб</div>
@@ -82,7 +79,6 @@
         </div>
         {% endif %}
 
-        <!-- Список жителей -->
         <div class="residents-section">
             <h2 class="residents-title">🏘️ Жители города</h2>
             <div class="residents-grid">
